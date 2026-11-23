@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ur">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HS-MART - Har Cheez Sasti</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial}
+body{background:#f2f2f2;padding-bottom:90px}
+.top{background:#0f2a5c;color:#fff;padding:12px;display:flex;justify-content:space-between;align-items:center}
+.top b{font-size:22px}.top span{font-size:11px;color:#ffcc00}
+.banner{background:linear-gradient(90deg,#007bff,#00c896);color:#fff;padding:15px;border-radius:10px;margin:10px}
+.note{background:#fff3cd;padding:10px;margin:0 10px;border-radius:8px;font-size:12px;text-align:center;font-weight:bold}
+.search{margin:10px;display:flex;gap:5px}
+.search input{flex:1;padding:12px;border-radius:8px;border:1px solid #ddd}
+.search button{background:#ffcc00;border:0;padding:0 15px;border-radius:8px;font-weight:bold}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:10px}
+.card{background:#fff;border-radius:12px;padding-bottom:10px}
+.card img{width:100%;height:150px;object-fit:cover;border-radius:12px 12px 0 0}
+.card h4{font-size:13px;padding:8px}
+.price{color:#e60000;font-weight:bold;padding:0 8px}
+.old{color:#888;text-decoration:line-through;font-size:11px}
+.card button{margin:8px;background:#ff6a00;color:#fff;border:0;width:calc(100% - 16px);padding:10px;border-radius:8px;font-weight:bold}
+.bottom{position:fixed;bottom:0;left:0;right:0;background:#fff;display:flex;justify-content:space-around;padding:12px;border-top:1px solid #ddd}
+.bottom div{text-align:center;font-size:13px;cursor:pointer}
+.cartBox{position:fixed;top:0;right:0;bottom:0;width:92%;max-width:380px;background:#fff;z-index:99;padding:15px;display:none;overflow:auto;box-shadow:-5px 0 20px rgba(0,0,0,.3)}
+.cartBox input{width:100%;padding:12px;margin:5px 0;border:1px solid #ddd;border-radius:8px}
+.wbtn{background:#25D366;color:#fff;border:0;width:100%;padding:14px;border-radius:10px;font-weight:bold;font-size:15px;margin-top:10px}
+.close{float:right;font-size:22px;cursor:pointer}
+.item{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #eee;font-size:13px}
+</style>
+</head>
+<body>
+<div class="top"><div><b>HS-MART</b><br><span>Walk-In Mart - Karachi</span></div><div>🛒 <span id="count">0</span></div></div>
+<div class="banner"><h2>Har Cheez Sasti Yahan</h2><p>Cash on Delivery - Poore Pakistan Me</p></div>
+<div class="note">KHARIDAR WALK-IN: Login ki zaroorat NAHI hai! Saman pasand karo, Cart me dalo, WhatsApp par order karo.</div>
+<div class="search"><input id="search" oninput="doSearch()" placeholder="Search karo... Ghari, Joota, Jacket"><button>Search</button></div>
+<div class="grid" id="grid"></div>
+
+<div class="bottom"><div onclick="window.scrollTo(0,0)">🏠<br>Home</div><div onclick="openCart()">🛒<br>Cart (<span id="count2">0</span>)</div><div onclick="openCart()">✅<br>Checkout</div><div onclick="alert('HS-MART Karachi - WhatsApp par order karein')">📞<br>Help</div></div>
+
+<div class="cartBox" id="cartBox">
+<span class="close" onclick="closeCart()">✖</span>
+<h2>Tumhara Cart 🛒</h2><br>
+<div id="cartItems"></div>
+<h3 id="total">Total: Rs. 0</h3><br>
+<h3>Apna Naam Aur Pata Likho:</h3>
+<input id="cname" placeholder="Apna Naam - Masalan Shakeel">
+<input id="cphone" placeholder="Mobile Number - 0300-1234567">
+<input id="caddress" placeholder="Poora Pata - Ghar / Gali / Sheher">
+<button class="wbtn" onclick="sendOrder()">📱 WhatsApp Par Order Bhejo</button>
+<p style="font-size:12px;margin-top:10px;text-align:center">Order dabate hi WhatsApp khul jayega, wahan SEND dabana hai.</p>
+</div>
+
+<script>
+let products=[
+{name:"Stylish Watch",price:989,old:2020,img:"https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400"},
+{name:"Winter Jacket",price:598,old:1049,img:"https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=400"},
+{name:"Running Shoes",price:1299,old:2499,img:"https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400"},
+{name:"Camera HD",price:2499,old:4999,img:"https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=400"},
+{name:"Smart Watch Black",price:2499,old:4999,img:"https://images.unsplash.com/photo-1579586337278-3befd40fd17a?w=400"},
+{name:"Wireless Earbuds",price:1499,old:2999,img:"https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=400"},
+{name:"Mens Premium Suit",price:4999,old:9999,img:"https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=400"},
+{name:"Sports Shoes",price:1899,old:2499,img:"https://images.unsplash.com/photo-1560769629-975ec94e6a86?w=400"}
+];
+let cart=[];
+function show(list){
+let g=document.getElementById("grid");g.innerHTML="";
+list.forEach((p,i)=>{
+g.innerHTML+=`<div class="card"><img src="${p.img}"><h4>${p.name}</h4><div class="price">Rs. ${p.price} <span class="old">Rs. ${p.old}</span></div><button onclick="add(${products.indexOf(p)})">Add to Cart</button></div>`;
+});
+}
+function doSearch(){
+let v=document.getElementById("search").value.toLowerCase();
+show(products.filter(p=>p.name.toLowerCase().includes(v)));
+}
+function add(i){
+cart.push(products[i]);
+document.getElementById("count").innerText=cart.length;
+document.getElementById("count2").innerText=cart.length;
+alert(products[i].name+" Cart me add ho gaya!");
+}
+function openCart(){
+document.getElementById("cartBox").style.display="block";
+let h="";let t=0;
+cart.forEach(c=>{h+=`<div class="item"><span>${c.name}</span><b>Rs. ${c.price}</b></div>`;t+=c.price;});
+if(cart.length==0) h="<p>Cart khaali hai. Pehle saman add karo.</p>";
+document.getElementById("cartItems").innerHTML=h;
+document.getElementById("total").innerText="Total: Rs. "+t;
+}
+function closeCart(){document.getElementById("cartBox").style.display="none";}
+function sendOrder(){
+let n=document.getElementById("cname").value;
+let ph=document.getElementById("cphone").value;
+let ad=document.getElementById("caddress").value;
+if(!n||!ph||!ad){alert("Jani, Pehle Naam, Number aur Pata poora likho!");return;}
+if(cart.length==0){alert("Cart khaali hai!");return;}
+let msg="*HS-MART NEW ORDER*%0A%0A";
+cart.forEach(c=>{msg+=c.name+" - Rs."+c.price+"%0A";});
+let t=cart.reduce((s,c)=>s+c.price,0);
+msg+="%0A*Total: Rs."+t+"*%0A%0A*Naam:* "+n+"%0A*Number:* "+ph+"%0A*Pata:* "+ad;
+let myNumber="923001234567";
+window.open("https://wa.me/"+myNumber+"?text="+msg);
+}
+show(products);
+</script>
+</body>
+</html>
