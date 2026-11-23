@@ -5,15 +5,133 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>HS-MART App - Walk-In Allowed</title>
 <style>
-*{box-sizing:border-box;font-family:'Segoe UI',Arial,sans-serif}body{margin:0;background:#f1f2f6;padding-bottom:70px}
+*{box-sizing:border-box;font-family:'Segoe UI',Arial,sans-serif}
+body{margin:0;background:#f1f2f6;padding-bottom:70px}
 .app-top{background:#0b2a5b;color:#fff;padding:14px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:20}
 .logo{width:46px;height:46px;background:#ffc107;color:#0b2a5b;border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:900}
-.app-top h1{margin:0;font-size:20px}.app-top small{opacity:.8}
+.app-top h1{margin:0;font-size:20px}
+.app-top small{opacity:.8}
 .user-chip{margin-left:auto;background:#fff;color:#0b2a5b;padding:6px 12px;border-radius:20px;font-size:12px;font-weight:800;cursor:pointer}
 .hero{margin:12px;border-radius:18px;background:linear-gradient(135deg,#0b5ed7,#00b894);color:#fff;padding:18px}
 .hero h2{margin:0 0 5px;font-size:22px}
 .walkin{background:#fff3cd;border:1px solid #ffc107;padding:10px 14px;border-radius:12px;margin:12px;font-size:13px;text-align:center;font-weight:700}
 .search{margin:12px;background:#fff;border-radius:25px;display:flex;overflow:hidden}
-.search input{flex:1;border:none;padding:12px;outline:none}.search button{background:#ffc107;border:none;padding:0 16px;font-weight:800}
-.cats{display:flex;gap:8px;overflow:auto;padding:0 12px}.cat{background:#fff;padding:9px 15px;border-radius:20px;white-space:nowrap;font-weight:700;cursor:pointer;border:1px solid #ddd}.cat.active{background:#0b2a5b;color:#fff}
-.grid{display:grid;grid-template-columns:1fr 1fr
+.search input{flex:1;border:none;padding:12px;outline:none}
+.search button{background:#ffc107;border:none;padding:0 16px;font-weight:800}
+.cats{display:flex;gap:8px;overflow:auto;padding:0 12px}
+.cat{background:#fff;padding:9px 15px;border-radius:20px;white-space:nowrap;font-weight:700;cursor:pointer;border:1px solid #ddd}
+.cat.active{background:#0b2a5b;color:#fff}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:12px}
+.card{background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 3px 12px rgba(0,0,0,.06)}
+.card img{width:100%;height:140px;object-fit:cover}
+.card .in{padding:11px}
+.card h4{margin:0;font-size:14px}
+.price{color:#d50000;font-weight:900}
+.card button{width:100%;margin-top:8px;background:#25D366;color:#fff;border:none;padding:10px;border-radius:10px;font-weight:800;cursor:pointer}
+.screen{display:none;padding:0 12px}
+.screen.show{display:block}
+.box{background:#fff;border-radius:18px;padding:18px;margin:12px 0}
+.box h2{text-align:center;color:#0b2a5b;margin-top:0}
+label{font-weight:700;font-size:13px;display:block;margin-top:12px}
+input,select,textarea{width:100%;padding:12px;margin-top:5px;border:1px solid #ddd;border-radius:10px;background:#f9fafb}
+.submit{width:100%;background:#0b2a5b;color:#fff;border:none;padding:14px;border-radius:12px;font-weight:800;margin-top:15px;cursor:pointer}
+.submit.orange{background:#ff6f00}
+.submit.green{background:#25D366}
+.comm{background:#fff3cd;padding:11px;border-radius:10px;font-size:13px;margin-top:10px;text-align:center}
+.bottom{position:fixed;bottom:0;left:0;right:0;background:#fff;display:flex;justify-content:space-around;padding:10px 0;border-top:1px solid #ddd;z-index:30}
+.bottom div{text-align:center;font-size:12px;cursor:pointer;color:#666}
+.bottom div.active{color:#0b2a5b;font-weight:800}
+.bottom span{font-size:22px;display:block}
+</style>
+</head>
+<body>
+<div class="app-top"><div class="logo">HS</div><div><h1>HS-MART</h1><small>Walk-In Mart</small></div><div class="user-chip" id="userChip" onclick="goScreen('login')">Dukandar Login</div></div>
+
+<div id="home" class="screen show">
+<div class="hero"><h2>Har Cheez Sasti Yahan</h2><p style="margin:0">Kharidar Walk-In - Bina Login Ke Khareedo!</p></div>
+<div class="walkin">KHARIDAR WALK-IN: Login ki zaroorat NAHI hai! Bas saman pasand karo, form bharo, order karo.</div>
+<div class="search"><input id="search" onkeyup="doSearch()" placeholder="Search..."><button>Search</button></div>
+<div class="cats"><div class="cat active" onclick="filterCat('all',this)">Sab Kuch</div><div class="cat" onclick="filterCat('mobile',this)">Mobile</div><div class="cat" onclick="filterCat('kapray',this)">Kapray</div><div class="cat" onclick="filterCat('ghar',this)">Ghar</div></div>
+<div class="grid" id="pGrid"></div>
+</div>
+
+<div id="login" class="screen">
+<div class="box"><h2>DUKANDAR LOGIN ONLY</h2><p style="text-align:center;font-size:13px;color:#555">Sirf Dukandar ko Login karna hai. Kharidar ko Login NAHI karna.</p>
+<label>Apna Naam *</label><input id="lName" placeholder="Muhammad Ahmed">
+<label>WhatsApp Number *</label><input id="lPhone" placeholder="03001234567">
+<label>Password (4 Digit) *</label><input id="lPass" type="password" placeholder="1234">
+<button class="submit green" onclick="doRegister()">DUKANDAR REGISTER - FREE</button>
+<button class="submit" onclick="doLogin()">DUKANDAR LOGIN</button>
+<button class="submit" style="background:#ff6f00" onclick="goScreen('home')">MEIN KHARIDAR HOON - WALK-IN KARO</button>
+</div>
+</div>
+
+<div id="dukandar" class="screen">
+<div class="box"><h2>DUKANDAR PANEL</h2>
+<p style="text-align:center;font-size:13px">Tumhari Dukan Nazar NAHI Ayegi, Sirf Saman Ayega</p>
+<label>Saman ka Naam *</label><input id="dProd" placeholder="Stylish Watch">
+<label>Price Rs *</label><input id="dPrice" type="number" placeholder="1500">
+<label>Category</label><select id="dCat"><option value="mobile">Mobile</option><option value="kapray">Kapray</option><option value="ghar">Ghar ka Saman</option></select>
+<label>Photo Link</label><input id="dImg" placeholder="https://...">
+<div class="comm">5% Rule: Rs 2000 ka saman bike ga to Rs 100 HS-MART ka, Rs 1900 Tumhara.</div>
+<button class="submit orange" onclick="addProduct()">SAMAN ADD KARO</button>
+</div>
+</div>
+
+<div id="kharidar" class="screen">
+<div class="box"><h2>WALK-IN ORDER FORM - NO LOGIN</h2>
+<p style="text-align:center;font-size:13px;color:#1b7a2e;font-weight:700">Login ki zaroorat NAHI hai - Walk-In Kharidar</p>
+<label>Apka Pura Naam *</label><input id="kName" placeholder="Apka naam">
+<label>WhatsApp Number *</label><input id="kPhone" placeholder="0300-1234567">
+<label>Mukamal Address *</label><textarea id="kAddr" rows="2"></textarea>
+<label>Shehar *</label><input id="kCity">
+<label>Product *</label><select id="kProd"></select>
+<label>Quantity</label><select id="kQty"><option>1</option><option>2</option><option>3</option></select>
+<label>Payment</label><select id="kPay"><option>Cash on Delivery</option><option>JazzCash</option><option>Easypaisa</option></select>
+<div class="comm" id="commBox">Commission Auto Yahan Ayega</div>
+<button class="submit" onclick="sendOrder()">WALK-IN ORDER CONFIRM KARO</button>
+</div>
+</div>
+
+<div id="profile" class="screen"><div class="box"><h2>DUKANDAR PROFILE</h2><div id="profileInfo"></div><button class="submit" style="background:#e53935" onclick="logout()">LOGOUT</button></div></div>
+
+<div class="bottom">
+<div class="active" onclick="goScreen('home',this)"><span>Home</span>Home</div>
+<div onclick="goScreen('login',this)"><span>Login</span>Dukandar Login</div>
+<div onclick="goScreen('dukandar',this)"><span>Shop</span>Dukandar</div>
+<div onclick="goScreen('kharidar',this)"><span>Cart</span>Walk-In Order</div>
+<div onclick="goScreen('profile',this)"><span>Profile</span>Profile</div>
+</div>
+
+<script>
+let products = JSON.parse(localStorage.getItem('hs_app_products') || '[]');
+if(products.length==0){
+products=[
+{name:'Premium Stylish Watch',price:1499,cat:'mobile',img:'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500',sellerPhone:'923001234567'},
+{name:'Wireless Earbuds Pro',price:1999,cat:'mobile',img:'https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=500',sellerPhone:'923001234567'},
+{name:'Ladies Premium Suit',price:2499,cat:'kapray',img:'https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=500',sellerPhone:'923001234567'},
+{name:'Smart Watch Ultra',price:3999,cat:'mobile',img:'https://images.unsplash.com/photo-1579586337278-3befd40fd17a?w=500',sellerPhone:'923001234567'}
+];
+localStorage.setItem('hs_app_products',JSON.stringify(products));
+}
+let currentUser = JSON.parse(localStorage.getItem('hs_current') || 'null');
+function updateUserChip(){document.getElementById('userChip').innerText = currentUser ? ('User: '+currentUser.name) : 'Dukandar Login';}
+function goScreen(id,el){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('show'));document.getElementById(id).classList.add('show');document.querySelectorAll('.bottom div').forEach(d=>d.classList.remove('active'));if(el)el.classList.add('active');window.scrollTo({top:0,behavior:'smooth'});if(id=='profile')showProfile();}
+function doRegister(){let n=document.getElementById('lName').value,p=document.getElementById('lPhone').value,pass=document.getElementById('lPass').value;if(!n||!p||!pass){alert('Jani! Naam, Number aur Password lazmi hai');return;}let users=JSON.parse(localStorage.getItem('hs_users')||'[]');if(users.find(u=>u.phone==p)){alert('Ye Number pehle se hai, Login karo');return;}let u={name:n,phone:p,pass:pass,role:'dukandar'};users.push(u);localStorage.setItem('hs_users',JSON.stringify(users));localStorage.setItem('hs_current',JSON.stringify(u));currentUser=u;updateUserChip();alert('Mubarak ho Dukandar! Account ban gaya.');goScreen('dukandar');}
+function doLogin(){let p=document.getElementById('lPhone').value,pass=document.getElementById('lPass').value;let users=JSON.parse(localStorage.getItem('hs_users')||'[]');let u=users.find(x=>x.phone==p&&x.pass==pass);if(!u){alert('Number ya Password galat hai');return;}localStorage.setItem('hs_current',JSON.stringify(u));currentUser=u;updateUserChip();alert('Welcome Back '+u.name);goScreen('dukandar');}
+function logout(){localStorage.removeItem('hs_current');currentUser=null;updateUserChip();alert('Logout ho gaya');goScreen('home');}
+function showProfile(){if(!currentUser){document.getElementById('profileInfo').innerHTML='<p style="text-align:center">Pehle Dukandar Login Karo Jani!</p>';return;}document.getElementById('profileInfo').innerHTML='<p><b>Naam:</b> '+currentUser.name+'</p><p><b>Number:</b> '+currentUser.phone+'</p><p><b>Role:</b> Dukandar - Bechne Wala</p><p><b>Status:</b> Verified</p>';}
+function renderProducts(){let h='';let o='';products.forEach((p,i)=>{let comm=Math.round(p.price*0.05);h+='<div class="card" data-cat="'+p.cat+'"><img src="'+p.img+'"><div class="in"><h4>'+p.name+'</h4><div><span class="price">Rs '+p.price+'</span></div><small style="color:#888">HS-MART Verified - Walk-In Available</small><button onclick="buyNow('+i+')">Walk-In Order Karein</button></div></div>';o+='<option value="'+i+'">'+p.name+' - Rs '+p.price+' (HS 5% = Rs '+comm+')</option>';});document.getElementById('pGrid').innerHTML=h;document.getElementById('kProd').innerHTML=o;updateComm();}
+function updateComm(){let idx=document.getElementById('kProd').value;if(idx===''||!products[idx])return;let p=products[idx];let qty=document.getElementById('kQty').value;let total=p.price*qty;let comm=Math.round(total*0.05);document.getElementById('commBox').innerHTML='Total Rs '+total+' | HS-MART 5% = Rs '+comm+' | Dukandar ko = Rs '+(total-comm);}
+document.getElementById('kQty').addEventListener('change',updateComm);
+document.getElementById('kProd').addEventListener('change',updateComm);
+function filterCat(c,el){document.querySelectorAll('.cat').forEach(x=>x.classList.remove('active'));el.classList.add('active');document.querySelectorAll('.card').forEach(card=>{card.style.display=(c=='all'||card.dataset.cat==c)?'block':'none';});}
+function doSearch(){let v=document.getElementById('search').value.toLowerCase();document.querySelectorAll('.card').forEach(card=>{card.style.display=card.innerText.toLowerCase().includes(v)?'block':'none';});}
+function buyNow(i){goScreen('kharidar');document.getElementById('kProd').value=i;updateComm();}
+function addProduct(){if(!currentUser||currentUser.role!='dukandar'){alert('Jani! Pehle Dukandar Login karo, phir Saman Add hoga.');goScreen('login');return;}let prod=document.getElementById('dProd').value,price=document.getElementById('dPrice').value;if(!prod||!price){alert('Saman ka Naam aur Price lazmi hai');return;}let clean=currentUser.phone.replace(/[^0-9]/g,'');if(clean.startsWith('0'))clean='92'+clean.substring(1);let img=document.getElementById('dImg').value||'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500';products.push({name:prod,price:parseInt(price),cat:document.getElementById('dCat').value,img:img,sellerPhone:clean});localStorage.setItem('hs_app_products',JSON.stringify(products));renderProducts();alert('Mubarak ho! Saman Add ho gaya. Dukan nazar nahi ayegi, sirf saman ayega.');goScreen('home');}
+function sendOrder(){let n=document.getElementById('kName').value,ph=document.getElementById('kPhone').value,ad=document.getElementById('kAddr').value,ci=document.getElementById('kCity').value;if(!n||!ph||!ad||!ci){alert('Jani! Naam, Number, Address, Shehar lazmi hai - Login nahi chahiye');return;}let idx=document.getElementById('kProd').value;let prod=products[idx];let qty=document.getElementById('kQty').value;let total=prod.price*qty;let comm=Math.round(total*0.05);let msg="*NEW WALK-IN ORDER - HS-MART APP*%0A%0A*Kharidar (Walk-In):* "+n+"%0A*WhatsApp:* "+ph+"%0A*Address:* "+ad+"%0A*Shehar:* "+ci+"%0A*Product:* "+prod.name+"%0A*Qty:* "+qty+"%0A*Total:* Rs "+total+"%0A*HS 5%:* Rs "+comm+"%0A*Dukandar ko:* Rs "+(total-comm)+"%0A*Payment:* "+document.getElementById('kPay').value;window.open("https://wa.me/"+prod.sellerPhone+"?text="+msg,"_blank");alert('Walk-In Order ho gaya jani! Login ke baghair!');}
+updateUserChip();
+renderProducts();
+</script>
+</body>
+</html>
