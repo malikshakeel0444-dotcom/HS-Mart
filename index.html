@@ -3,62 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>HS-Mart - Online Shopping</title>
+<title>HS-MART App - Walk-In Allowed</title>
 <style>
-body{font-family:sans-serif;margin:0;background:#f5f5f5}
-header{background:#ff3d00;color:#fff;padding:15px;text-align:center}
-header h1{margin:0} header p{margin:5px 0 0}
-.search{padding:10px;display:flex;gap:5px;background:#fff}
-.search input{flex:1;padding:12px;border:1px solid #ddd;border-radius:8px}
-.search button{background:#ff3d00;color:#fff;border:none;padding:12px 15px;border-radius:8px}
-.cats{display:flex;gap:8px;overflow:auto;padding:10px}
-.cats span{background:#fff;padding:8px 14px;border-radius:20px;white-space:nowrap}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:10px}
-.card{background:#fff;border-radius:10px;overflow:hidden;padding-bottom:10px}
-.card img{width:100%;height:140px;object-fit:cover}
-.card h3{margin:8px 10px 2px;font-size:15px}
-.card p{margin:0 10px;color:#ff3d00;font-weight:bold}
-.card button{margin:8px 10px;width:calc(100% - 20px);padding:10px;background:#25D366;color:#fff;border:none;border-radius:8px}
-.add{background:#fff;margin:10px;padding:15px;border-radius:10px}
-.add input,.add textarea{width:100%;padding:10px;margin:5px 0;border:1px solid #ddd;border-radius:8px;box-sizing:border-box}
-.add button{width:100%;padding:12px;background:#ff3d00;color:#fff;border:none;border-radius:8px}
-footer{text-align:center;padding:15px;color:#888}
-</style>
-</head>
-<body>
-<header><h1>HS-MART</h1><p>Har Cheez - Sasti - Yahan</p></header>
-<div class="search"><input id="search" placeholder="HS-Mart me search karein..."><button onclick="searchItem()">Search</button></div>
-<div class="cats"><span>All</span><span>Mobile</span><span>Kapray</span><span>Ghar ka Saman</span><span>Khilonay</span><span>Beauty</span></div>
-<div class="grid" id="grid"></div>
-<div class="add">
-<h2>Apna Saman Lagayen</h2>
-<input id="pname" placeholder="Cheez ka naam">
-<input id="pprice" placeholder="Qeemat Rs me" type="number">
-<input id="pimg" placeholder="Tasveer ka Link (optional)">
-<button onclick="addProduct()">Add Karein</button>
-</div>
-<footer>HS-Mart © 2026 - Made in Pakistan</footer>
-<script>
-let products=[
-{name:"Stylish Watch",price:1499,img:"https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400"},
-{name:"Wireless Earbuds",price:1999,img:"https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=400"},
-{name:"Ladies Suit",price:2499,img:"https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=400"},
-{name:"Smart Watch",price:3999,img:"https://images.unsplash.com/photo-1546868871-7041f2a55e12?w=400"}
-];
-function show(){
-let g=document.getElementById('grid'); g.innerHTML='';
-products.forEach(p=>{
-g.innerHTML+=`<div class="card"><img src="${p.img}"><h3>${p.name}</h3><p>Rs ${p.price}</p><button onclick="order('${p.name}')">WhatsApp par Order</button></div>`;
-});
-}
-function order(name){ window.open("https://wa.me/923000000000?text=Mujhe "+encodeURIComponent(name)+" chahiye - HS-Mart"); }
-function addProduct(){
-let n=document.getElementById('pname').value; let pr=document.getElementById('pprice').value; let im=document.getElementById('pimg').value || "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400";
-if(!n||!pr){alert("Naam aur Qeemat likhein");return;}
-products.unshift({name:n,price:pr,img:im}); show(); alert("Mubarak! Apka saman HS-Mart par lag gaya");
-}
-function searchItem(){ let s=document.getElementById('search').value.toLowerCase(); products=products.filter(p=>p.name.toLowerCase().includes(s)); if(products.length==0) location.reload(); show(); }
-show();
-</script>
-</body>
-</html>
+*{box-sizing:border-box;font-family:'Segoe UI',Arial,sans-serif}body{margin:0;background:#f1f2f6;padding-bottom:70px}
+.app-top{background:#0b2a5b;color:#fff;padding:14px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:20}
+.logo{width:46px;height:46px;background:#ffc107;color:#0b2a5b;border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:900}
+.app-top h1{margin:0;font-size:20px}.app-top small{opacity:.8}
+.user-chip{margin-left:auto;background:#fff;color:#0b2a5b;padding:6px 12px;border-radius:20px;font-size:12px;font-weight:800;cursor:pointer}
+.hero{margin:12px;border-radius:18px;background:linear-gradient(135deg,#0b5ed7,#00b894);color:#fff;padding:18px}
+.hero h2{margin:0 0 5px;font-size:22px}
+.walkin{background:#fff3cd;border:1px solid #ffc107;padding:10px 14px;border-radius:12px;margin:12px;font-size:13px;text-align:center;font-weight:700}
+.search{margin:12px;background:#fff;border-radius:25px;display:flex;overflow:hidden}
+.search input{flex:1;border:none;padding:12px;outline:none}.search button{background:#ffc107;border:none;padding:0 16px;font-weight:800}
+.cats{display:flex;gap:8px;overflow:auto;padding:0 12px}.cat{background:#fff;padding:9px 15px;border-radius:20px;white-space:nowrap;font-weight:700;cursor:pointer;border:1px solid #ddd}.cat.active{background:#0b2a5b;color:#fff}
+.grid{display:grid;grid-template-columns:1fr 1fr
