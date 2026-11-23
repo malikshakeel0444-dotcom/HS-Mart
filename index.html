@@ -101,37 +101,93 @@ input,select,textarea{width:100%;padding:12px;margin-top:5px;border:1px solid #d
 <div onclick="goScreen('dukandar',this)"><span>Shop</span>Dukandar</div>
 <div onclick="goScreen('kharidar',this)"><span>Cart</span>Walk-In Order</div>
 <div onclick="goScreen('profile',this)"><span>Profile</span>Profile</div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HS-MART - Temu Style</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
+body{background:#f5f5f5;padding-bottom:85px}
+.top{position:sticky;top:0;background:#fff;padding:10px;z-index:99;box-shadow:0 1px 5px #ddd}
+.logo{font-weight:900;font-size:22px;text-align:center;color:#000;padding:2px 0 8px}
+.logo span{color:#fb7701}
+.search{display:flex;align-items:center;background:#f0f0f0;border-radius:25px;padding:11px 14px}
+.search input{flex:1;border:none;background:transparent;outline:none;font-size:15px}
+.search b{background:#000;color:#fff;padding:8px 14px;border-radius:50%;font-size:14px}
+.cats{display:flex;gap:20px;overflow-x:auto;padding:12px 12px;background:#fff;white-space:nowrap}
+.cats b{font-size:15px;font-weight:600;color:#333}
+.cats b.active{color:#000;border-bottom:3px solid #000;padding-bottom:4px}
+.offer{display:flex;background:#fff7e8;padding:12px;gap:10px}
+.offer div{flex:1}
+.offer p{font-size:13px;color:#666}
+.offer b{font-size:14px;color:#2a7a2a}
+.green{background:#0a7a3a;color:#fff;display:flex;justify-content:space-between;padding:12px 14px;font-weight:700;font-size:15px}
+.deals{display:flex;gap:10px;padding:10px}
+.deal{flex:1;background:#fff;border-radius:12px;overflow:hidden;text-align:center;padding-bottom:10px}
+.deal h3{font-size:15px;padding:8px;color:#d32f2f}
+.deal h3.o{color:#ff6a00}
+.deal .img{font-size:65px;padding:10px;background:#f9f9f9}
+.deal p{font-size:15px;font-weight:800;color:#ff5a00}
+.deal s{font-size:12px;color:#888;font-weight:400}
+.tax{background:#0a7a3a;color:#fff;text-align:center;padding:10px;font-size:13px;font-weight:600}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:10px}
+.card{background:#fff;border-radius:12px;overflow:hidden;padding-bottom:10px}
+.card .img{font-size:60px;text-align:center;padding:18px 5px;background:#fafafa}
+.card h4{font-size:13px;padding:0 8px;height:32px;overflow:hidden;color:#333}
+.card p{padding:4px 8px;font-weight:900;color:#ff5a00;font-size:16px}
+.card p s{color:#888;font-weight:400;font-size:12px}
+.card button{margin:5px 8px;background:#000;color:#fff;border:none;padding:7px 12px;border-radius:20px;font-size:12px;width:calc(100% - 16px)}
+.sign{position:fixed;bottom:65px;left:0;right:0;background:#222;color:#fff;display:flex;justify-content:space-between;align-items:center;padding:12px 14px;z-index:98}
+.sign b{font-size:15px}
+.sign span{background:#ff6a00;padding:8px 18px;border-radius:20px;font-weight:700}
+.bottom{position:fixed;bottom:0;left:0;right:0;background:#fff;display:flex;justify-content:space-around;padding:10px 0 12px;border-top:1px solid #ddd;z-index:99}
+.bottom div{text-align:center;font-size:12px;color:#555}
+.bottom div.active{color:#ff5a00;font-weight:700}
+.bottom i{font-size:22px;display:block;font-style:normal}
+</style>
+</head>
+<body>
+
+<div class="top">
+<div class="logo">HS-<span>MART</span></div>
+<div class="search"><input placeholder="HS-MART me search karo..."><b>Q</b></div>
 </div>
 
-<script>
-let products = JSON.parse(localStorage.getItem('hs_app_products') || '[]');
-if(products.length==0){
-products=[
-{name:'Premium Stylish Watch',price:1499,cat:'mobile',img:'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500',sellerPhone:'923001234567'},
-{name:'Wireless Earbuds Pro',price:1999,cat:'mobile',img:'https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=500',sellerPhone:'923001234567'},
-{name:'Ladies Premium Suit',price:2499,cat:'kapray',img:'https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=500',sellerPhone:'923001234567'},
-{name:'Smart Watch Ultra',price:3999,cat:'mobile',img:'https://images.unsplash.com/photo-1579586337278-3befd40fd17a?w=500',sellerPhone:'923001234567'}
-];
-localStorage.setItem('hs_app_products',JSON.stringify(products));
-}
-let currentUser = JSON.parse(localStorage.getItem('hs_current') || 'null');
-function updateUserChip(){document.getElementById('userChip').innerText = currentUser ? ('User: '+currentUser.name) : 'Dukandar Login';}
-function goScreen(id,el){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('show'));document.getElementById(id).classList.add('show');document.querySelectorAll('.bottom div').forEach(d=>d.classList.remove('active'));if(el)el.classList.add('active');window.scrollTo({top:0,behavior:'smooth'});if(id=='profile')showProfile();}
-function doRegister(){let n=document.getElementById('lName').value,p=document.getElementById('lPhone').value,pass=document.getElementById('lPass').value;if(!n||!p||!pass){alert('Jani! Naam, Number aur Password lazmi hai');return;}let users=JSON.parse(localStorage.getItem('hs_users')||'[]');if(users.find(u=>u.phone==p)){alert('Ye Number pehle se hai, Login karo');return;}let u={name:n,phone:p,pass:pass,role:'dukandar'};users.push(u);localStorage.setItem('hs_users',JSON.stringify(users));localStorage.setItem('hs_current',JSON.stringify(u));currentUser=u;updateUserChip();alert('Mubarak ho Dukandar! Account ban gaya.');goScreen('dukandar');}
-function doLogin(){let p=document.getElementById('lPhone').value,pass=document.getElementById('lPass').value;let users=JSON.parse(localStorage.getItem('hs_users')||'[]');let u=users.find(x=>x.phone==p&&x.pass==pass);if(!u){alert('Number ya Password galat hai');return;}localStorage.setItem('hs_current',JSON.stringify(u));currentUser=u;updateUserChip();alert('Welcome Back '+u.name);goScreen('dukandar');}
-function logout(){localStorage.removeItem('hs_current');currentUser=null;updateUserChip();alert('Logout ho gaya');goScreen('home');}
-function showProfile(){if(!currentUser){document.getElementById('profileInfo').innerHTML='<p style="text-align:center">Pehle Dukandar Login Karo Jani!</p>';return;}document.getElementById('profileInfo').innerHTML='<p><b>Naam:</b> '+currentUser.name+'</p><p><b>Number:</b> '+currentUser.phone+'</p><p><b>Role:</b> Dukandar - Bechne Wala</p><p><b>Status:</b> Verified</p>';}
-function renderProducts(){let h='';let o='';products.forEach((p,i)=>{let comm=Math.round(p.price*0.05);h+='<div class="card" data-cat="'+p.cat+'"><img src="'+p.img+'"><div class="in"><h4>'+p.name+'</h4><div><span class="price">Rs '+p.price+'</span></div><small style="color:#888">HS-MART Verified - Walk-In Available</small><button onclick="buyNow('+i+')">Walk-In Order Karein</button></div></div>';o+='<option value="'+i+'">'+p.name+' - Rs '+p.price+' (HS 5% = Rs '+comm+')</option>';});document.getElementById('pGrid').innerHTML=h;document.getElementById('kProd').innerHTML=o;updateComm();}
-function updateComm(){let idx=document.getElementById('kProd').value;if(idx===''||!products[idx])return;let p=products[idx];let qty=document.getElementById('kQty').value;let total=p.price*qty;let comm=Math.round(total*0.05);document.getElementById('commBox').innerHTML='Total Rs '+total+' | HS-MART 5% = Rs '+comm+' | Dukandar ko = Rs '+(total-comm);}
-document.getElementById('kQty').addEventListener('change',updateComm);
-document.getElementById('kProd').addEventListener('change',updateComm);
-function filterCat(c,el){document.querySelectorAll('.cat').forEach(x=>x.classList.remove('active'));el.classList.add('active');document.querySelectorAll('.card').forEach(card=>{card.style.display=(c=='all'||card.dataset.cat==c)?'block':'none';});}
-function doSearch(){let v=document.getElementById('search').value.toLowerCase();document.querySelectorAll('.card').forEach(card=>{card.style.display=card.innerText.toLowerCase().includes(v)?'block':'none';});}
-function buyNow(i){goScreen('kharidar');document.getElementById('kProd').value=i;updateComm();}
-function addProduct(){if(!currentUser||currentUser.role!='dukandar'){alert('Jani! Pehle Dukandar Login karo, phir Saman Add hoga.');goScreen('login');return;}let prod=document.getElementById('dProd').value,price=document.getElementById('dPrice').value;if(!prod||!price){alert('Saman ka Naam aur Price lazmi hai');return;}let clean=currentUser.phone.replace(/[^0-9]/g,'');if(clean.startsWith('0'))clean='92'+clean.substring(1);let img=document.getElementById('dImg').value||'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500';products.push({name:prod,price:parseInt(price),cat:document.getElementById('dCat').value,img:img,sellerPhone:clean});localStorage.setItem('hs_app_products',JSON.stringify(products));renderProducts();alert('Mubarak ho! Saman Add ho gaya. Dukan nazar nahi ayegi, sirf saman ayega.');goScreen('home');}
-function sendOrder(){let n=document.getElementById('kName').value,ph=document.getElementById('kPhone').value,ad=document.getElementById('kAddr').value,ci=document.getElementById('kCity').value;if(!n||!ph||!ad||!ci){alert('Jani! Naam, Number, Address, Shehar lazmi hai - Login nahi chahiye');return;}let idx=document.getElementById('kProd').value;let prod=products[idx];let qty=document.getElementById('kQty').value;let total=prod.price*qty;let comm=Math.round(total*0.05);let msg="*NEW WALK-IN ORDER - HS-MART APP*%0A%0A*Kharidar (Walk-In):* "+n+"%0A*WhatsApp:* "+ph+"%0A*Address:* "+ad+"%0A*Shehar:* "+ci+"%0A*Product:* "+prod.name+"%0A*Qty:* "+qty+"%0A*Total:* Rs "+total+"%0A*HS 5%:* Rs "+comm+"%0A*Dukandar ko:* Rs "+(total-comm)+"%0A*Payment:* "+document.getElementById('kPay').value;window.open("https://wa.me/"+prod.sellerPhone+"?text="+msg,"_blank");alert('Walk-In Order ho gaya jani! Login ke baghair!');}
-updateUserChip();
-renderProducts();
-</script>
+<div class="cats"><b class="active">All</b><b>Women</b><b>Men</b><b>Home</b><b>Jewelry</b><b>Sports</b><b>Watch</b></div>
+
+<div class="offer">
+<div><b>✓ Free shipping</b><p>Limited-time offer</p></div>
+<div><b>🚚 Delivery guarantee</b><p>Refund for any issue</p></div>
+</div>
+
+<div class="green"><span>🛡️ Why choose HS-MART?</span><span>Safe payments ></span></div>
+
+<div class="deals">
+<div class="deal"><h3>🔻 Clearance deals ></h3><div class="img">⌚</div><p>Rs.989 <s>2,028</s></p></div>
+<div class="deal"><h3 class="o">⚡ Lightning deals ></h3><div class="img">🧥</div><p>Rs.598 <s>1,043</s></p></div>
+</div>
+
+<div class="tax">Tax & Customs Policy | Hassle-free tax service ></div>
+
+<div class="grid">
+<div class="card"><div class="img">☕</div><h4>Food Grade Stainless Steel Coffee Cup</h4><p>Rs.6,641 <s>8,200</s></p><button onclick="alert('HS-MART: Order Add Ho Gaya!')">Add to Cart</button></div>
+<div class="card"><div class="img">🧦</div><h4>6pcs / 3 Pairs Mens Heavy-Duty Socks</h4><p>Rs.702 <s>999</s></p><button onclick="alert('HS-MART: Order Add Ho Gaya!')">Add to Cart</button></div>
+<div class="card"><div class="img">⌚</div><h4>HS Smart Watch - Black Color Premium</h4><p>Rs.2,499 <s>4,999</s></p><button onclick="alert('HS-MART: Order Add Ho Gaya!')">Add to Cart</button></div>
+<div class="card"><div class="img">🎧</div><h4>Wireless Earbuds Bluetooth - HS Mart</h4><p>Rs.1,499 <s>2,999</s></p><button onclick="alert('HS-MART: Order Add Ho Gaya!')">Add to Cart</button></div>
+<div class="card"><div class="img">👔</div><h4>Mens Premium Suit - HS Collection</h4><p>Rs.4,999 <s>9,999</s></p><button onclick="alert('HS-MART: Order Add Ho Gaya!')">Add to Cart</button></div>
+<div class="card"><div class="img">👟</div><h4>Sports Shoes - Comfortable Running</h4><p>Rs.1,899 <s>3,499</s></p><button onclick="alert('HS-MART: Order Add Ho Gaya!')">Add to Cart</button></div>
+</div>
+
+<div class="sign"><b>Sign in for the best experience</b><span>Sign in</span></div>
+
+<div class="bottom">
+<div class="active"><i>🏠</i>Home</div>
+<div><i>☰</i>Categories</div>
+<div><i>👤</i>You</div>
+<div><i>🛒</i>Cart</div>
+</div>
+
 </body>
 </html>
