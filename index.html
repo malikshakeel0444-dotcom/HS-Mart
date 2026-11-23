@@ -1,157 +1,47 @@
 <!DOCTYPE html>
-<html lang="ur">
+<html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>HS-MART App - Walk-In Allowed</title>
+<title>HS-MART</title>
 <style>
-*{box-sizing:border-box;font-family:'Segoe UI',Arial,sans-serif}
-body{margin:0;background:#f1f2f6;padding-bottom:70px}
-.app-top{background:#0b2a5b;color:#fff;padding:14px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:20}
-.logo{width:46px;height:46px;background:#ffc107;color:#0b2a5b;border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:900}
-.app-top h1{margin:0;font-size:20px}
-.app-top small{opacity:.8}
-.user-chip{margin-left:auto;background:#fff;color:#0b2a5b;padding:6px 12px;border-radius:20px;font-size:12px;font-weight:800;cursor:pointer}
-.hero{margin:12px;border-radius:18px;background:linear-gradient(135deg,#0b5ed7,#00b894);color:#fff;padding:18px}
-.hero h2{margin:0 0 5px;font-size:22px}
-.walkin{background:#fff3cd;border:1px solid #ffc107;padding:10px 14px;border-radius:12px;margin:12px;font-size:13px;text-align:center;font-weight:700}
-.search{margin:12px;background:#fff;border-radius:25px;display:flex;overflow:hidden}
-.search input{flex:1;border:none;padding:12px;outline:none}
-.search button{background:#ffc107;border:none;padding:0 16px;font-weight:800}
-.cats{display:flex;gap:8px;overflow:auto;padding:0 12px}
-.cat{background:#fff;padding:9px 15px;border-radius:20px;white-space:nowrap;font-weight:700;cursor:pointer;border:1px solid #ddd}
-.cat.active{background:#0b2a5b;color:#fff}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:12px}
-.card{background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 3px 12px rgba(0,0,0,.06)}
-.card img{width:100%;height:140px;object-fit:cover}
-.card .in{padding:11px}
-.card h4{margin:0;font-size:14px}
-.price{color:#d50000;font-weight:900}
-.card button{width:100%;margin-top:8px;background:#25D366;color:#fff;border:none;padding:10px;border-radius:10px;font-weight:800;cursor:pointer}
-.screen{display:none;padding:0 12px}
-.screen.show{display:block}
-.box{background:#fff;border-radius:18px;padding:18px;margin:12px 0}
-.box h2{text-align:center;color:#0b2a5b;margin-top:0}
-label{font-weight:700;font-size:13px;display:block;margin-top:12px}
-input,select,textarea{width:100%;padding:12px;margin-top:5px;border:1px solid #ddd;border-radius:10px;background:#f9fafb}
-.submit{width:100%;background:#0b2a5b;color:#fff;border:none;padding:14px;border-radius:12px;font-weight:800;margin-top:15px;cursor:pointer}
-.submit.orange{background:#ff6f00}
-.submit.green{background:#25D366}
-.comm{background:#fff3cd;padding:11px;border-radius:10px;font-size:13px;margin-top:10px;text-align:center}
-.bottom{position:fixed;bottom:0;left:0;right:0;background:#fff;display:flex;justify-content:space-around;padding:10px 0;border-top:1px solid #ddd;z-index:30}
-.bottom div{text-align:center;font-size:12px;cursor:pointer;color:#666}
-.bottom div.active{color:#0b2a5b;font-weight:800}
-.bottom span{font-size:22px;display:block}
-</style>
-</head>
-<body>
-<div class="app-top"><div class="logo">HS</div><div><h1>HS-MART</h1><small>Walk-In Mart</small></div><div class="user-chip" id="userChip" onclick="goScreen('login')">Dukandar Login</div></div>
-
-<div id="home" class="screen show">
-<div class="hero"><h2>Har Cheez Sasti Yahan</h2><p style="margin:0">Kharidar Walk-In - Bina Login Ke Khareedo!</p></div>
-<div class="walkin">KHARIDAR WALK-IN: Login ki zaroorat NAHI hai! Bas saman pasand karo, form bharo, order karo.</div>
-<div class="search"><input id="search" onkeyup="doSearch()" placeholder="Search..."><button>Search</button></div>
-<div class="cats"><div class="cat active" onclick="filterCat('all',this)">Sab Kuch</div><div class="cat" onclick="filterCat('mobile',this)">Mobile</div><div class="cat" onclick="filterCat('kapray',this)">Kapray</div><div class="cat" onclick="filterCat('ghar',this)">Ghar</div></div>
-<div class="grid" id="pGrid"></div>
-</div>
-
-<div id="login" class="screen">
-<div class="box"><h2>DUKANDAR LOGIN ONLY</h2><p style="text-align:center;font-size:13px;color:#555">Sirf Dukandar ko Login karna hai. Kharidar ko Login NAHI karna.</p>
-<label>Apna Naam *</label><input id="lName" placeholder="Muhammad Ahmed">
-<label>WhatsApp Number *</label><input id="lPhone" placeholder="03001234567">
-<label>Password (4 Digit) *</label><input id="lPass" type="password" placeholder="1234">
-<button class="submit green" onclick="doRegister()">DUKANDAR REGISTER - FREE</button>
-<button class="submit" onclick="doLogin()">DUKANDAR LOGIN</button>
-<button class="submit" style="background:#ff6f00" onclick="goScreen('home')">MEIN KHARIDAR HOON - WALK-IN KARO</button>
-</div>
-</div>
-
-<div id="dukandar" class="screen">
-<div class="box"><h2>DUKANDAR PANEL</h2>
-<p style="text-align:center;font-size:13px">Tumhari Dukan Nazar NAHI Ayegi, Sirf Saman Ayega</p>
-<label>Saman ka Naam *</label><input id="dProd" placeholder="Stylish Watch">
-<label>Price Rs *</label><input id="dPrice" type="number" placeholder="1500">
-<label>Category</label><select id="dCat"><option value="mobile">Mobile</option><option value="kapray">Kapray</option><option value="ghar">Ghar ka Saman</option></select>
-<label>Photo Link</label><input id="dImg" placeholder="https://...">
-<div class="comm">5% Rule: Rs 2000 ka saman bike ga to Rs 100 HS-MART ka, Rs 1900 Tumhara.</div>
-<button class="submit orange" onclick="addProduct()">SAMAN ADD KARO</button>
-</div>
-</div>
-
-<div id="kharidar" class="screen">
-<div class="box"><h2>WALK-IN ORDER FORM - NO LOGIN</h2>
-<p style="text-align:center;font-size:13px;color:#1b7a2e;font-weight:700">Login ki zaroorat NAHI hai - Walk-In Kharidar</p>
-<label>Apka Pura Naam *</label><input id="kName" placeholder="Apka naam">
-<label>WhatsApp Number *</label><input id="kPhone" placeholder="0300-1234567">
-<label>Mukamal Address *</label><textarea id="kAddr" rows="2"></textarea>
-<label>Shehar *</label><input id="kCity">
-<label>Product *</label><select id="kProd"></select>
-<label>Quantity</label><select id="kQty"><option>1</option><option>2</option><option>3</option></select>
-<label>Payment</label><select id="kPay"><option>Cash on Delivery</option><option>JazzCash</option><option>Easypaisa</option></select>
-<div class="comm" id="commBox">Commission Auto Yahan Ayega</div>
-<button class="submit" onclick="sendOrder()">WALK-IN ORDER CONFIRM KARO</button>
-</div>
-</div>
-
-<div id="profile" class="screen"><div class="box"><h2>DUKANDAR PROFILE</h2><div id="profileInfo"></div><button class="submit" style="background:#e53935" onclick="logout()">LOGOUT</button></div></div>
-
-<div class="bottom">
-<div class="active" onclick="goScreen('home',this)"><span>Home</span>Home</div>
-<div onclick="goScreen('login',this)"><span>Login</span>Dukandar Login</div>
-<div onclick="goScreen('dukandar',this)"><span>Shop</span>Dukandar</div>
-<div onclick="goScreen('kharidar',this)"><span>Cart</span>Walk-In Order</div>
-<div onclick="goScreen('profile',this)"><span>Profile</span>Profile</div>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>HS-MART - Temu Style</title>
-<style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
-body{background:#f5f5f5;padding-bottom:85px}
-.top{position:sticky;top:0;background:#fff;padding:10px;z-index:99;box-shadow:0 1px 5px #ddd}
-.logo{font-weight:900;font-size:22px;text-align:center;color:#000;padding:2px 0 8px}
-.logo span{color:#fb7701}
-.search{display:flex;align-items:center;background:#f0f0f0;border-radius:25px;padding:11px 14px}
-.search input{flex:1;border:none;background:transparent;outline:none;font-size:15px}
-.search b{background:#000;color:#fff;padding:8px 14px;border-radius:50%;font-size:14px}
-.cats{display:flex;gap:20px;overflow-x:auto;padding:12px 12px;background:#fff;white-space:nowrap}
-.cats b{font-size:15px;font-weight:600;color:#333}
-.cats b.active{color:#000;border-bottom:3px solid #000;padding-bottom:4px}
-.offer{display:flex;background:#fff7e8;padding:12px;gap:10px}
-.offer div{flex:1}
-.offer p{font-size:13px;color:#666}
-.offer b{font-size:14px;color:#2a7a2a}
-.green{background:#0a7a3a;color:#fff;display:flex;justify-content:space-between;padding:12px 14px;font-weight:700;font-size:15px}
-.deals{display:flex;gap:10px;padding:10px}
-.deal{flex:1;background:#fff;border-radius:12px;overflow:hidden;text-align:center;padding-bottom:10px}
-.deal h3{font-size:15px;padding:8px;color:#d32f2f}
-.deal h3.o{color:#ff6a00}
-.deal .img{font-size:65px;padding:10px;background:#f9f9f9}
-.deal p{font-size:15px;font-weight:800;color:#ff5a00}
-.deal s{font-size:12px;color:#888;font-weight:400}
-.tax{background:#0a7a3a;color:#fff;text-align:center;padding:10px;font-size:13px;font-weight:600}
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial}
+body{background:#f2f2f2}
+.top{background:#0f2a5c;color:#fff;padding:12px;display:flex;justify-content:space-between}
+.top b{font-size:20px}
+.top button{background:#fff;border:0;padding:7px 10px;border-radius:20px;font-weight:bold}
+.banner{background:linear-gradient(90deg,#007bff,#00c896);color:#fff;padding:15px;border-radius:10px;margin:10px}
+.note{background:#fff3cd;padding:8px;margin:0 10px;border-radius:8px;font-size:11px;text-align:center;font-weight:bold}
+.search{margin:10px;display:flex;gap:5px}
+.search input{flex:1;padding:12px;border-radius:8px;border:1px solid #ddd}
+.search button{background:#ffcc00;border:0;padding:0 15px;border-radius:8px;font-weight:bold}
+.cats{display:flex;gap:8px;padding:0 10px}
+.cats span{background:#fff;padding:8px 14px;border-radius:20px;font-size:13px;border:1px solid #ddd}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:10px}
-.card{background:#fff;border-radius:12px;overflow:hidden;padding-bottom:10px}
-.card .img{font-size:60px;text-align:center;padding:18px 5px;background:#fafafa}
-.card h4{font-size:13px;padding:0 8px;height:32px;overflow:hidden;color:#333}
-.card p{padding:4px 8px;font-weight:900;color:#ff5a00;font-size:16px}
-.card p s{color:#888;font-weight:400;font-size:12px}
-.card button{margin:5px 8px;background:#000;color:#fff;border:none;padding:7px 12px;border-radius:20px;font-size:12px;width:calc(100% - 16px)}
-.sign{position:fixed;bottom:65px;left:0;right:0;background:#222;color:#fff;display:flex;justify-content:space-between;align-items:center;padding:12px 14px;z-index:98}
-.sign b{font-size:15px}
-.sign span{background:#ff6a00;padding:8px 18px;border-radius:20px;font-weight:700}
-.bottom{position:fixed;bottom:0;left:0;right:0;background:#fff;display:flex;justify-content:space-around;padding:10px 0 12px;border-top:1px solid #ddd;z-index:99}
-.bottom div{text-align:center;font-size:12px;color:#555}
-.bottom div.active{color:#ff5a00;font-weight:700}
-.bottom i{font-size:22px;display:block;font-style:normal}
+.card{background:#fff;border-radius:12px;padding-bottom:10px}
+.card img{width:100%;height:150px;object-fit:cover;border-radius:12px 12px 0 0}
+.card h4{font-size:13px;padding:8px}
+.price{color:red;font-weight:bold;padding:0 8px}
+.card button{margin:8px;background:#ff6a00;color:#fff;border:0;width:calc(100% - 16px);padding:9px;border-radius:8px;font-weight:bold}
+.bottom{position:fixed;bottom:0;left:0;right:0;background:#fff;display:flex;justify-content:space-around;padding:10px;border-top:1px solid #ddd}
 </style>
 </head>
 <body>
-
-<div class="top">
-<div class="logo">HS-<span>MART</span></div>
+<div class="top"><b>HS-MART</b><button>Dukandar Login</button></div>
+<div class="banner"><h2>Har Cheez Sasti Yahan</h2><p>Kharidar Walk-In - Bina Login Ke Khareedo!</p></div>
+<div class="note">KHARIDAR WALK-IN: Login ki zaroorat NAHI hai!</div>
+<div class="search"><input placeholder="Search..."><button>Search</button></div>
+<div class="cats"><span>Sab Kuch</span><span>Mobile</span><span>Kapray</span><span>Ghar</span></div>
+<div class="grid">
+<div class="card"><img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400"><h4>Stylish Watch</h4><div class="price">Rs. 989</div><button>Add to Cart</button></div>
+<div class="card"><img src="https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=400"><h4>Winter Jacket</h4><div class="price">Rs. 598</div><button>Add to Cart</button></div>
+<div class="card"><img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400"><h4>Running Shoes</h4><div class="price">Rs. 1,299</div><button>Add to Cart</button></div>
+<div class="card"><img src="https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=400"><h4>Camera HD</h4><div class="price">Rs. 2,499</div><button>Add to Cart</button></div>
+</div>
+<br><br><br>
+<div class="bottom"><div>Home</div><div>Categories</div><div>You</div><div>Cart</div></div>
+</body>
+</html>logo">HS-<span>MART</span></div>
 <div class="search"><input placeholder="HS-MART me search karo..."><b>Q</b></div>
 </div>
 
